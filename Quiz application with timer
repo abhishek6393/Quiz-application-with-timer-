@@ -1,0 +1,53 @@
+import java.util.Scanner;
+import java.util.Timer;
+import java.util.TimerTask;
+
+public class QuizApplication {
+    private static final int QUIZ_DURATION_SECONDS = 60; // Set the quiz duration in seconds
+    private static int score = 0;
+
+    public static void main(String[] args) {
+        Timer timer = new Timer();
+        TimerTask quizTask = new TimerTask() {
+            int timeLeft = QUIZ_DURATION_SECONDS;
+
+            @Override
+            public void run() {
+                if (timeLeft > 0) {
+                    System.out.println("Time Left: " + timeLeft + " seconds");
+                    timeLeft--;
+                } else {
+                    endQuiz(timer);
+                }
+            }
+        };
+
+        timer.scheduleAtFixedRate(quizTask, 0, 1000); // Schedule the quiz task to run every second
+
+        // Your quiz questions and logic can be implemented here
+        // For simplicity, let's have a single sample question
+        System.out.println("What is the capital of France?");
+        System.out.println("A. London");
+        System.out.println("B. Berlin");
+        System.out.println("C. Paris");
+
+        Scanner scanner = new Scanner(System.in);
+        String userAnswer = scanner.nextLine();
+
+        // Check user's answer
+        if (userAnswer.equalsIgnoreCase("C")) {
+            score++;
+            System.out.println("Correct!");
+        } else {
+            System.out.println("Incorrect!");
+        }
+
+        endQuiz(timer);
+    }
+
+    private static void endQuiz(Timer timer) {
+        timer.cancel(); // Stop the timer
+        System.out.println("Quiz Ended! Your score: " + score);
+        System.exit(0); // Exit the program
+    }
+}
